@@ -6,20 +6,21 @@
     <title>Media Player</title>
     <link rel="icon" href="favicon.png" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
-    <link href="bootstrap-icons-1.11.3/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css" />
-    <script src="scripts/constants.js" defer></script>
-    <script src="scripts/db.js" defer></script>
-    <script src="scripts/utils.js" defer></script>
-    <script src="scripts/toast.js" defer></script>
-    <script src="scripts/main.js" defer></script>
+     <link href="vendor/bootstrap-icons-1.13.1/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/constants.js" defer></script>
+    <script src="js/db.js" defer></script>
+    <script src="js/utils.js" defer></script>
+    <script src="js/toast.js" defer></script>
+    <script src="js/subtitle-display.js" defer></script>
+    <script src="js/main.js" defer></script>
   </head>
   <body>
     <div class="app container">
       <div class="header">
         <div class="main-bar">
           <div class="title">
-            <img src="logo.png" />
+            <img src="assets/logo.png" />
             <p>Media Player</p>
           </div>
           <button class="menu-toggle" onclick="toggleHeaderMenu()">
@@ -30,7 +31,7 @@
           <label class="file-input">
             <i class="bi bi-file-earmark-play-fill"></i>
             Open File
-            <input type="file" accept="audio/*,video/*" class="hidden" oninput="openFiles(this.files)" multiple />
+            <input type="file" accept="audio/*,video/*,.srt,.vtt" class="hidden" oninput="openFiles(this.files)" multiple />
           </label>
 
           <label class="folder-input">
@@ -47,11 +48,12 @@
         </div>
       </div>
 
-      <div class="media-container" onclick="toggleHeaderMenu(false)">
-        <img src="logo.png" class="icon" />
+      <div class="media-container" onclick="pause()">
+        <img src="assets/logo.png" class="icon" />
         <img class="cover hidden" />
         <audio id="audio-player" class="hidden"></audio>
         <video id="video-player" class="hidden"></video>
+        <div class="subtitle-display hidden"></div>
       </div>
 
       <div class="controls">
