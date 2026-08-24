@@ -12,15 +12,15 @@ const repeatBtn = document.querySelector(".controls .repeat");
 const rateBtn = document.querySelector(".controls .rate");
 
 let currentPlayer = null;
-let currentVolume = load("currentVolume", 50)
+let currentVolume = load("currentVolume", 50);
 let currentRate = 1;
 
-let isMuted = load("isMuted", false)
+let isMuted = load("isMuted", false);
 let repeatEnabled = false;
 
 let currentFiles = [];
 let currentFile = -1;
-let currentSubtitles = []
+let currentSubtitles = [];
 let currentSubtitle = null;
 
 let currentCover = null;
@@ -28,25 +28,25 @@ let animationInterval = null;
 
 document.addEventListener("DOMContentLoaded", async function () {
   updateVolumeDisplay();
-  currentCover = await DB.getItem("settings", "cover")
-  updateCoverEl()
+  currentCover = await DB.getItem("settings", "cover");
+  updateCoverEl();
 });
 
 async function openFile(file) {
   if (!file) return;
-  
-  const subtitle = currentSubtitles.find(subtitle => getFileName(subtitle) === getFileName(file))
+
+  const subtitle = currentSubtitles.find((subtitle) => getFileName(subtitle) === getFileName(file));
   if (subtitle) {
-    await SubtitleDisplay.openFile(subtitle)
-    currentSubtitle = subtitle
+    await SubtitleDisplay.openFile(subtitle);
+    currentSubtitle = subtitle;
   } else {
-    currentSubtitle = null
-    SubtitleDisplay.toggle(false)
+    currentSubtitle = null;
+    SubtitleDisplay.toggle(false);
   }
-  
+
   const isAudio = file.type.startsWith("audio/");
   const isVideo = file.type.startsWith("video/");
-  
+
   if (!isAudio && !isVideo) return;
 
   const dataUrl = URL.createObjectURL(file);
@@ -67,7 +67,7 @@ async function openFile(file) {
   currentPlayer.src = dataUrl;
   currentPlayer.play();
 
-  if (isVideo) coverEl.classList.add("hidden")
+  if (isVideo) coverEl.classList.add("hidden");
   document.title = decodedFileName + " - Media Player";
   toggleHeaderMenu(false);
 }
@@ -76,22 +76,22 @@ function openFiles(files) {
   if (!files) return;
   if (files.length <= 0) return;
 
-  const filtered = Array.from(files).filter(file => file.type.startsWith('audio/') || file.type.startsWith('video/'));
-  currentFiles = shuffle(filtered)
+  const filtered = Array.from(files).filter((file) => file.type.startsWith("audio/") || file.type.startsWith("video/"));
+  currentFiles = shuffle(filtered);
 
-  const subtitles = Array.from(files).filter(file => isSubtitle(file));
-  currentSubtitles = subtitles
+  const subtitles = Array.from(files).filter((file) => isSubtitle(file));
+  currentSubtitles = subtitles;
 
   openNext();
 }
 
 function openNext() {
-  currentFile = cycleIndex(currentFile + 1, currentFiles.length)
+  currentFile = cycleIndex(currentFile + 1, currentFiles.length);
   openFile(currentFiles[currentFile]);
 }
 
 function openPrev() {
-  currentFile = cycleIndex(currentFile - 1, currentFiles.length)
+  currentFile = cycleIndex(currentFile - 1, currentFiles.length);
   openFile(currentFiles[currentFile]);
 }
 
@@ -112,7 +112,6 @@ function replay() {
 
   currentPlayer.currentTime = 0;
   currentPlayer.play();
-  SubtitleDisplay.replay()
 }
 
 function updatePauseBtn() {
@@ -146,9 +145,9 @@ function changeVolume(direction) {
   currentVolume = Math.min(Math.max(currentVolume + amount, 0), 100);
 
   if (currentPlayer) currentPlayer.volume = currentVolume / 100;
-  save("currentVolume", currentVolume)
+  save("currentVolume", currentVolume);
   updateVolumeDisplay();
-  Toast.show(`<i class="bi bi-volume-down-fill"></i> ${currentVolume}%`)
+  Toast.show(`<i class="bi bi-volume-down-fill"></i> ${currentVolume}%`);
 }
 
 function updateVolumeDisplay() {
@@ -162,15 +161,15 @@ function mute() {
   isMuted = !isMuted;
   if (currentPlayer) currentPlayer.muted = isMuted;
 
-  save("isMuted", isMuted)
+  save("isMuted", isMuted);
 
   updateVolumeDisplay();
 }
 
 function jump(amount) {
-  if (!currentPlayer) return
+  if (!currentPlayer) return;
 
-  currentPlayer.currentTime += amount
+  currentPlayer.currentTime += amount;
   Toast.show(`${amount} seconds`);
 }
 
@@ -202,12 +201,10 @@ function seekTo(time) {
   currentPlayer.currentTime = time;
 
   if (currentPlayer.paused) currentPlayer.play();
-
-  if (currentSubtitle) SubtitleDisplay.seekTo(time)
 }
 
 function changeRate() {
-  currentRate = Math.max(0.75, (currentRate + 0.25) % 1.5)
+  currentRate = Math.max(0.75, (currentRate + 0.25) % 1.5);
 
   if (currentPlayer) currentPlayer.playbackRate = currentRate;
 
@@ -215,16 +212,16 @@ function changeRate() {
   ${currentRate}x
   <div class="tooltip-text">Playback speed ${currentRate}x</div>
   `;
-  Toast.show(`${currentRate}x`)
+  Toast.show(`${currentRate}x`);
 }
 
 async function changeCover(file) {
-  if (!file) return
+  if (!file) return;
 
-  currentCover = file
+  currentCover = file;
   updateCoverEl();
 
-  DB.putItem("settings", currentCover, "cover")
+  DB.putItem("settings", currentCover, "cover");
 }
 
 function updateCoverEl() {
@@ -262,33 +259,37 @@ function toggleHeaderMenu(force) {
 }
 
 [audioPlayer, videoPlayer].forEach((player) => {
-  player.addEventListener("loadedmetadata", function () {
+  player.addEventListener("loadedmetadata", () => {
     player.volume = currentVolume / 100;
     player.muted = isMuted;
     player.playbackRate = currentRate;
     updateVolumeDisplay();
     updatePauseBtn();
   });
-  player.addEventListener("timeupdate", updateProgressBar);
-
-  player.addEventListener("play", function () {
-    startAnimation();
-    updatePauseBtn();
-    if (currentSubtitle) SubtitleDisplay.play()
+  player.addEventListener("timeupdate", () => {
+    updateProgressBar()
+    if (currentSubtitle) SubtitleDisplay.seekTo(player.currentTime)
   });
 
-  player.addEventListener("pause", function () {
+  player.addEventListener("play", () => {
+    startAnimation();
+    updatePauseBtn();
+  });
+
+  player.addEventListener("pause", () => {
     stopAnimation();
     updatePauseBtn();
-    if (currentSubtitle) SubtitleDisplay.pause()
+  });
+
+  player.addEventListener("ratechange", (event) => {
+    console.log(event.target.playbackRate)
   });
 
   player.addEventListener("ended", () => {
     if (!repeatEnabled) {
       currentFile < currentFiles.length - 1 ? openNext() : updatePauseBtn();
     } else {
-      replay()
-      if (currentSubtitle) SubtitleDisplay.replay()
+      replay();
     }
   });
 });
