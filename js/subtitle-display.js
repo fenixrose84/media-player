@@ -101,16 +101,13 @@ const SubtitleDisplay = (() => {
 
   // --- UI UPDATES ---
   function updateUI() {
-    // Find active subtitle index
-    const currentIndex = subtitles.findIndex((s) => currentTime >= s.startTime && currentTime <= s.endTime);
+    element.innerHTML = ""
 
+    const currentIndex = subtitles.findIndex((s) => currentTime >= s.startTime && currentTime <= s.endTime);
     if (currentIndex === -1) return;
 
-    element.innerHTML = "";
-    for (let i = 0; i <= 2; i++) {
-      const order = 1 - i;
-      displaySubtitle(currentIndex - order);
-    }
+    displaySubtitle(currentIndex);
+    displaySubtitle(currentIndex + 1);
   }
 
   function displaySubtitle(index) {
