@@ -38,6 +38,7 @@ const SubtitleDisplay = (() => {
 
     const text = await file.text();
     subtitles = parseSubtitles(text);
+    subtitles = subtitles.filter((item) => item.content !== "[Music]");
 
     duration = subtitles[subtitles.length - 1].endTime;
 
@@ -89,7 +90,7 @@ const SubtitleDisplay = (() => {
     currentTime = Math.max(0, Math.min(time, duration));
     updateUI();
   }
-  
+
   function toggle(force) {
     if (force != null) {
       element.classList.toggle("hidden", !force);
@@ -100,8 +101,22 @@ const SubtitleDisplay = (() => {
 
   // --- UI UPDATES ---
   function updateUI() {
-    const currentSub = subtitles.find((s) => currentTime >= s.startTime && currentTime <= s.endTime);
-    element.innerHTML = currentSub ? currentSub.content : "";
+    // Find active subtitle index
+    const currentIndex = subtitles.findIndex((s) => currentTime >= s.startTime && currentTime <= s.endTime);
+
+    if (currentIndex === -1) return;
+
+    element.innerHTML = "";
+    for (let i = 0; i <= 2; i++) {
+      const order = 2 - i;
+      displaySubtitle(currentIndex - order);
+    }
+  }
+
+  function displaySubtitle(index) {
+    const subtitle = subtitles[index];
+    if (!subtitle) return;
+    element.innerHTML += `${subtitle.content}<br>`;
   }
 
   // --- TIME PARSING ---

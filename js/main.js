@@ -112,6 +112,7 @@ function replay() {
 
   currentPlayer.currentTime = 0;
   currentPlayer.play();
+  SubtitleDisplay.replay()
 }
 
 function updatePauseBtn() {
