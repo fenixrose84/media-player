@@ -288,4 +288,8 @@ body {
   .controls .switch {
     display: inline-block;
   }
+
+  .subtitle-display {
+    max-width: calc(100% - 20px);
+  }
 }

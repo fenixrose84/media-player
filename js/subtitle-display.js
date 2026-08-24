@@ -108,7 +108,7 @@ const SubtitleDisplay = (() => {
 
     element.innerHTML = "";
     for (let i = 0; i <= 2; i++) {
-      const order = 2 - i;
+      const order = 1 - i;
       displaySubtitle(currentIndex - order);
     }
   }
