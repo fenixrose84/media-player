@@ -10,6 +10,7 @@ const pauseBtn = document.querySelector(".controls .pause");
 const volumeDisplay = document.querySelector(".controls .volume .value");
 const repeatBtn = document.querySelector(".controls .repeat");
 const rateBtn = document.querySelector(".controls .rate");
+const timeDisplay = document.querySelector(".controls .time-display");
 
 let currentPlayer = null;
 let currentVolume = load("currentVolume", 50);
@@ -167,9 +168,7 @@ function mute() {
 }
 
 function jump(amount) {
-  if (!currentPlayer) return;
-
-  currentPlayer.currentTime += amount;
+  if (currentPlayer) currentPlayer.currentTime += amount;
   Toast.show(`${amount} seconds`);
 }
 
@@ -193,6 +192,14 @@ function updateProgressBar() {
   progressBar.min = 0;
   progressBar.max = currentPlayer.duration;
   progressBar.value = currentPlayer.currentTime;
+}
+
+function updateTimeDisplay() {
+  if (!currentPlayer) return;
+
+  const current = formatTime(currentPlayer.currentTime);
+  const total = formatTime(currentPlayer.duration);
+  timeDisplay.innerHTML = `${current} / ${total}`;
 }
 
 function seekTo(time) {
@@ -267,8 +274,9 @@ function toggleHeaderMenu(force) {
     updatePauseBtn();
   });
   player.addEventListener("timeupdate", () => {
-    updateProgressBar()
-    if (currentSubtitle) SubtitleDisplay.seekTo(player.currentTime)
+    updateProgressBar();
+    updateTimeDisplay();
+    if (currentSubtitle) SubtitleDisplay.seekTo(player.currentTime);
   });
 
   player.addEventListener("play", () => {
@@ -279,10 +287,6 @@ function toggleHeaderMenu(force) {
   player.addEventListener("pause", () => {
     stopAnimation();
     updatePauseBtn();
-  });
-
-  player.addEventListener("ratechange", (event) => {
-    console.log(event.target.playbackRate)
   });
 
   player.addEventListener("ended", () => {

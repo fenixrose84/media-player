@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,7 +6,7 @@
     <title>Media Player</title>
     <link rel="icon" href="favicon.png" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
-     <link href="vendor/bootstrap-icons-1.13.1/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="vendor/bootstrap-icons-1.13.1/bootstrap-icons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css" />
     <script src="js/constants.js" defer></script>
     <script src="js/db.js" defer></script>
@@ -57,9 +57,18 @@
       </div>
 
       <div class="controls">
-        <div class="progress-bar">
-          <input type="range" class="slider" oninput="seekTo(this.value)" onchange="updatePauseBtn()" value="0" />
+        <div class="progress-controls">
+          <button onclick="jump(-5)">
+            <i class="bi bi-arrow-counterclockwise"></i>
+          </button>
+          <div class="progress-bar">
+            <input type="range" class="slider" oninput="seekTo(this.value)" onchange="updatePauseBtn()" value="0" />
+          </div>
+          <button onclick="jump(5)">
+            <i class="bi bi-arrow-clockwise"></i>
+          </button>
         </div>
+
         <div class="control-menu">
           <button class="pause tooltip" onclick="pause()">
             <i class="bi bi-pause-fill"></i>
@@ -79,7 +88,7 @@
             </button>
 
             <button class="replay tooltip" onclick="replay()">
-              <i class="bi bi-arrow-counterclockwise"></i>
+              R
               <div class="tooltip-text">Replay (r)</div>
             </button>
           </div>
@@ -109,6 +118,8 @@
               <div class="tooltip-text">Fullscreen (f)</div>
             </button>
           </div>
+
+          <div class="time-display">--:-- / --:--</div>
           <button class="switch tooltip" onclick="switchControlMenu()">
             <i class="bi bi-three-dots"></i>
             <div class="tooltip-text">Switch</div>

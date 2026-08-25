@@ -149,9 +149,17 @@ body {
   padding: 5px;
 }
 
-.controls .progress-bar {
+.controls .progress-controls {
+  display: flex;
+  gap: 5px;
   width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.controls .progress-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
 }
 
 .controls .progress-bar .slider {
@@ -192,6 +200,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.controls .time-display {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  text-wrap: nowrap;
 }
 
 .controls .switch {
@@ -268,10 +283,6 @@ body {
 
   .header .menu.expanded {
     display: flex;
-  }
-
-  .controls .control-menu .switch {
-    margin-left: auto;
   }
 
   .controls .buttons {

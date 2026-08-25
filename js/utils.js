@@ -103,18 +103,29 @@ function cycleIndex(index, length) {
 }
 
 function getFileName(file) {
-  const lastDotIndex = file.name.lastIndexOf('.');
+  const lastDotIndex = file.name.lastIndexOf(".");
   if (lastDotIndex <= 0) return file.name; // No extension or hidden file
   return file.name.substring(0, lastDotIndex);
 }
 
 function isSubtitle(file) {
-  const subtitleExtensions = [
-    'srt',
-    'vtt',
-  ];
-  
-  const extension = file.name.split('.').pop().toLowerCase();
+  const subtitleExtensions = ["srt", "vtt"];
+
+  const extension = file.name.split(".").pop().toLowerCase();
 
   return subtitleExtensions.includes(extension);
+}
+
+function formatTime(seconds) {
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+
+  const formattedMins = String(mins).padStart(2, "0");
+  const formattedSecs = String(secs).padStart(2, "0");
+
+  if (hrs > 0) {
+    return `${hrs}:${formattedMins}:${formattedSecs}`;
+  }
+  return `${formattedMins}:${formattedSecs}`;
 }
