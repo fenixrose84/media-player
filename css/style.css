@@ -142,6 +142,16 @@ body {
   transition: 1s;
 }
 
+.media-container .overlay-btns {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 .controls {
   position: relative;
   z-index: 2;

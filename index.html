@@ -48,24 +48,28 @@
         </div>
       </div>
 
-      <div class="media-container" onclick="pause()">
+      <div class="media-container">
         <img src="assets/logo.png" class="icon" />
         <img class="cover hidden" />
         <audio id="audio-player" class="hidden"></audio>
         <video id="video-player" class="hidden"></video>
         <div class="subtitle-display hidden"></div>
+        <div class="overlay-btns">
+          <div onclick="pause()" ondblclick="jump(-10)"></div>
+          <div onclick="pause()" ondblclick="jump(10)"></div>
+        </div>
       </div>
 
       <div class="controls">
         <div class="progress-controls">
-          <button onclick="jump(-5)">
-            <i class="bi bi-arrow-counterclockwise"></i>
+          <button onclick="jump(-10)">
+            <i class="bi bi-arrow-left"></i>
           </button>
           <div class="progress-bar">
             <input type="range" class="slider" oninput="seekTo(this.value)" onchange="updatePauseBtn()" value="0" />
           </div>
-          <button onclick="jump(5)">
-            <i class="bi bi-arrow-clockwise"></i>
+          <button onclick="jump(10)">
+            <i class="bi bi-arrow-right"></i>
           </button>
         </div>
 
@@ -88,7 +92,7 @@
             </button>
 
             <button class="replay tooltip" onclick="replay()">
-              R
+              <i class="bi bi-arrow-counterclockwise"></i>
               <div class="tooltip-text">Replay (r)</div>
             </button>
           </div>
