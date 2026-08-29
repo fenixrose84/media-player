@@ -33,6 +33,21 @@ document.addEventListener("DOMContentLoaded", async function () {
   updateCoverEl();
 });
 
+function openFiles(files) {
+  if (!files) return;
+  if (files.length <= 0) return;
+
+  const filtered = Array.from(files).filter((file) => file.type.startsWith("audio/") || file.type.startsWith("video/"));
+  if (filtered.length <= 0) return;
+
+  currentFiles = shuffle(filtered);
+
+  const subtitles = Array.from(files).filter((file) => isSubtitle(file));
+  currentSubtitles = subtitles;
+
+  openNext();
+}
+
 async function openFile(file) {
   if (!file) return;
 
@@ -71,19 +86,6 @@ async function openFile(file) {
   if (isVideo) coverEl.classList.add("hidden");
   document.title = decodedFileName + " - Media Player";
   toggleHeaderMenu(false);
-}
-
-function openFiles(files) {
-  if (!files) return;
-  if (files.length <= 0) return;
-
-  const filtered = Array.from(files).filter((file) => file.type.startsWith("audio/") || file.type.startsWith("video/"));
-  currentFiles = shuffle(filtered);
-
-  const subtitles = Array.from(files).filter((file) => isSubtitle(file));
-  currentSubtitles = subtitles;
-
-  openNext();
 }
 
 function openNext() {
